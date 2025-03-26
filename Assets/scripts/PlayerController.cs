@@ -2,31 +2,51 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private float horizontal;
-    private float speed = 8f;
-    private float jumpingPower = 16f;
     private bool isFacingRight = true;
-
+    
+    private float horizontal;
+    [SerializeField] private float speed = 8f;
+    [SerializeField] private float jumpingPower = 16f;
+    [SerializeField] private float baseGravityScale = 1f;
+    private float gravityScale;
+    [SerializeField] private float maxGravityScale = 3f;
+    [SerializeField] private float gravityIncreaseRate = 0.1f;
+    
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+
+    void Start()
+    {
+        gravityScale = baseGravityScale;
+    }
 
     void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
 
-        bool grounded = IsGrounded(); // Store the grounded state for debugging
+        bool grounded = IsGrounded();
         Debug.Log("IsGrounded: " + grounded);
+
+        if (grounded)
+        {
+            gravityScale = baseGravityScale;
+        }
+        else
+        {
+            gravityScale = Mathf.Min(gravityScale + gravityIncreaseRate * Time.deltaTime, maxGravityScale);
+        }
+        rb.gravityScale = gravityScale;
 
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
             Debug.Log("Jumping!");
-            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpingPower);
         }
 
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
+        if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0f)
         {  
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
         }
 
         Flip();
@@ -34,12 +54,12 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+        rb.linearVelocity = new Vector2(horizontal * speed, rb.linearVelocity.y);
     }
 
     private bool IsGrounded()
     {
-        float checkRadius = 0.2f; // Adjust if needed
+        float checkRadius = 0.2f;
         Collider2D groundCollider = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
 
         if (groundCollider != null)
@@ -56,21 +76,12 @@ public class PlayerController : MonoBehaviour
 
     private void Flip()
     {
-        if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
+        if ((isFacingRight && horizontal < 0f) || (!isFacingRight && horizontal > 0f))
         {
             isFacingRight = !isFacingRight;
             Vector3 localScale = transform.localScale;
             localScale.x *= -1f;
             transform.localScale = localScale;
-        }
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (groundCheck != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(groundCheck.position, 0.2f);
         }
     }
 }
