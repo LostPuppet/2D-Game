@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private bool isFacingRight = true;
-    
+
     private float horizontal;
     [SerializeField] private float speed = 8f;
     [SerializeField] private float jumpingPower = 16f;
@@ -11,10 +11,13 @@ public class PlayerController : MonoBehaviour
     private float gravityScale;
     [SerializeField] private float maxGravityScale = 3f;
     [SerializeField] private float gravityIncreaseRate = 0.1f;
-    
+
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+
+    // Friction
+    [SerializeField] private float friction = 0.1f; // Amount of friction when grounded
 
     void Start()
     {
@@ -27,14 +30,8 @@ public class PlayerController : MonoBehaviour
 
         bool grounded = IsGrounded();
 
-        if (grounded)
-        {
             gravityScale = baseGravityScale;
-        }
-        else
-        {
-            gravityScale = Mathf.Min(gravityScale + gravityIncreaseRate * Time.deltaTime, maxGravityScale);
-        }
+            ApplyFriction();
         rb.gravityScale = gravityScale;
 
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
@@ -43,7 +40,7 @@ public class PlayerController : MonoBehaviour
         }
 
         if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0f)
-        {  
+        {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
         }
 
@@ -52,39 +49,46 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.linearVelocity = new Vector2(horizontal * speed, rb.linearVelocity.y);
+        // Apply horizontal movement using AddForce
+        rb.AddForce(new Vector2(horizontal * speed, 0), ForceMode2D.Force);
     }
 
     private bool IsGrounded()
     {
         float checkRadius = 0.2f;
         Collider2D groundCollider = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
-
-
         return groundCollider != null;
     }
 
     private void Flip()
-{
-    if ((isFacingRight && horizontal < 0f) || (!isFacingRight && horizontal > 0f))
     {
-        isFacingRight = !isFacingRight;
-        Vector3 localScale = transform.localScale;
-        localScale.x *= -1f;
-        transform.localScale = localScale;
-
-        // Iterate through child objects and prevent flipping for tagged ones
-        foreach (Transform child in transform)
+        if ((isFacingRight && horizontal < 0f) || (!isFacingRight && horizontal > 0f))
         {
-            if (child.CompareTag("NoFlip"))
+            isFacingRight = !isFacingRight;
+            Vector3 localScale = transform.localScale;
+            localScale.x *= -1f;
+            transform.localScale = localScale;
+
+            // Iterate through child objects and prevent flipping for tagged ones
+            foreach (Transform child in transform)
             {
-                Vector3 childScale = child.localScale;
-                childScale.x *= -1f; // Revert the flip
-                child.localScale = childScale;
+                if (child.CompareTag("NoFlip"))
+                {
+                    Vector3 childScale = child.localScale;
+                    childScale.x *= -1f; // Revert the flip
+                    child.localScale = childScale;
+                }
             }
         }
     }
-}
 
-
+    // Apply friction to the player's horizontal movement using AddForce
+    private void ApplyFriction()
+    {
+        if (Mathf.Abs(rb.linearVelocity.x) > 0)
+        {
+            float frictionForce = Mathf.Sign(rb.linearVelocity.x) * friction; // Apply friction in the correct direction
+            rb.AddForce(new Vector2(-frictionForce, 0), ForceMode2D.Force); // Apply friction as a force
+        }
+    }
 }

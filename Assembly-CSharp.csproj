@@ -71,6 +71,7 @@
     <Compile Include="Assets\scripts\TimeToKill.cs" />
     <Compile Include="Assets\scripts\FollowCam.cs" />
     <Compile Include="Assets\scripts\Pivot.cs" />
+    <Compile Include="Assets\scripts\Stats.cs" />
     <Compile Include="Assets\scripts\GroundSensor.cs" />
     <Compile Include="Assets\scripts\PlayerController.cs" />
   </ItemGroup>
