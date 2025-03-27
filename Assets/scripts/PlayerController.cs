@@ -26,7 +26,6 @@ public class PlayerController : MonoBehaviour
         horizontal = Input.GetAxisRaw("Horizontal");
 
         bool grounded = IsGrounded();
-        Debug.Log("IsGrounded: " + grounded);
 
         if (grounded)
         {
@@ -40,7 +39,6 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
-            Debug.Log("Jumping!");
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpingPower);
         }
 
@@ -62,26 +60,31 @@ public class PlayerController : MonoBehaviour
         float checkRadius = 0.2f;
         Collider2D groundCollider = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
 
-        if (groundCollider != null)
-        {
-            Debug.Log("Ground detected: " + groundCollider.gameObject.name);
-        }
-        else
-        {
-            Debug.Log("Not grounded! Check position, layer, and collider.");
-        }
 
         return groundCollider != null;
     }
 
     private void Flip()
+{
+    if ((isFacingRight && horizontal < 0f) || (!isFacingRight && horizontal > 0f))
     {
-        if ((isFacingRight && horizontal < 0f) || (!isFacingRight && horizontal > 0f))
+        isFacingRight = !isFacingRight;
+        Vector3 localScale = transform.localScale;
+        localScale.x *= -1f;
+        transform.localScale = localScale;
+
+        // Iterate through child objects and prevent flipping for tagged ones
+        foreach (Transform child in transform)
         {
-            isFacingRight = !isFacingRight;
-            Vector3 localScale = transform.localScale;
-            localScale.x *= -1f;
-            transform.localScale = localScale;
+            if (child.CompareTag("NoFlip"))
+            {
+                Vector3 childScale = child.localScale;
+                childScale.x *= -1f; // Revert the flip
+                child.localScale = childScale;
+            }
         }
     }
+}
+
+
 }
