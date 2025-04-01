@@ -1,11 +1,10 @@
 using UnityEngine;
-using TMPro;  // Make sure to include the TMPro namespace for TextMeshPro
+using TMPro;  
 
 public class Stats : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D rb;      // Reference to the player's Rigidbody2D
-    [SerializeField] private TMP_Text velocityText; // Reference to the TMP Text component where we will display the velocity
-
+    [SerializeField] private Rigidbody2D rb;      
+    [SerializeField] private TMP_Text velocityText; 
     // Public variables to store and access velocity values elsewhere
     public float PlayerXVelocity { get; private set; }
     public float PlayerYVelocity { get; private set; }

@@ -16,8 +16,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
 
-    // Friction
-    [SerializeField] private float friction = 0.1f; // Amount of friction when grounded
+    [SerializeField] private float friction = 0.1f;
+    private float maxVelocity = 5f; // Max allowed velocity before stopping acceleration
 
     void Start()
     {
@@ -27,11 +27,17 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
+        float currentVelocity = rb.linearVelocity.x;
 
+        // Prevent acceleration if moving past max velocity in the same direction
+        if ((horizontal > 0 && currentVelocity >= maxVelocity) || (horizontal < 0 && currentVelocity <= -maxVelocity))
+        {
+            horizontal = 0;
+        }
+        
         bool grounded = IsGrounded();
-
-            gravityScale = baseGravityScale;
-            ApplyFriction();
+        gravityScale = baseGravityScale;
+        ApplyFriction();
         rb.gravityScale = gravityScale;
 
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
@@ -49,7 +55,6 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Apply horizontal movement using AddForce
         rb.AddForce(new Vector2(horizontal * speed, 0), ForceMode2D.Force);
     }
 
@@ -69,26 +74,24 @@ public class PlayerController : MonoBehaviour
             localScale.x *= -1f;
             transform.localScale = localScale;
 
-            // Iterate through child objects and prevent flipping for tagged ones
             foreach (Transform child in transform)
             {
                 if (child.CompareTag("NoFlip"))
                 {
                     Vector3 childScale = child.localScale;
-                    childScale.x *= -1f; // Revert the flip
+                    childScale.x *= -1f;
                     child.localScale = childScale;
                 }
             }
         }
     }
 
-    // Apply friction to the player's horizontal movement using AddForce
     private void ApplyFriction()
     {
         if (Mathf.Abs(rb.linearVelocity.x) > 0)
         {
-            float frictionForce = Mathf.Sign(rb.linearVelocity.x) * friction; // Apply friction in the correct direction
-            rb.AddForce(new Vector2(-frictionForce, 0), ForceMode2D.Force); // Apply friction as a force
+            float frictionForce = Mathf.Sign(rb.linearVelocity.x) * friction;
+            rb.AddForce(new Vector2(-frictionForce, 0), ForceMode2D.Force);
         }
     }
 }
