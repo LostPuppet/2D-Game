@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 75b4db4bcddeb8d4fa2334757a7550a9
+guid: f66e550f303d2324dac73a46e870da34
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1656166294940094332
-    second: city_0
+      213: -2470819768504267732
+    second: FadeToBlack_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,30 +96,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: city_0
+      name: FadeToBlack_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1536
-        height: 1024
+        width: 800
+        height: 600
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 480fe1d878d1409e0800000000000000
-      internalID: -1656166294940094332
+      spriteID: c2c4a42f282e5bdd0800000000000000
+      internalID: -2470819768504267732
       vertices: []
       indices: 
       edges: []

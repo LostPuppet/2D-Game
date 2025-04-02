@@ -226,7 +226,7 @@ MonoBehaviour:
   speed: 10
   explosionPrefab: {fileID: 1039990441103150020, guid: 20ffdbf6383b04c419771341215358f4, type: 3}
   explosionRadius: 5
-  explosionForce: 250
+  explosionForce: 150
 --- !u!50 &7669277059927321829
 Rigidbody2D:
   serializedVersion: 5
