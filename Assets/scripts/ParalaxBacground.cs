@@ -7,15 +7,16 @@ public class ParallaxBackground : MonoBehaviour
     [SerializeField] private Vector2 offset; // Offset for x and y positions
 
     [SerializeField] private float lerpSpeed = 5f; // Speed at which the background moves (lerps)
-
-    void Start()
-    {
-        // Find the player object by tag (make sure the player has the "Player" tag)
-        player = GameObject.FindWithTag("Player").transform;
-    }
+    
 
     void FixedUpdate()
     {
+        if (player == null)
+        {
+            // Attempt to find the player each frame until it exists
+            player = GameObject.FindWithTag("Player")?.transform;
+        }
+
         if (player != null)
         {
             // Calculate the target position based on the player's position and the parallax factor, with offsets

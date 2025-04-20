@@ -1,7 +1,8 @@
 using UnityEngine;
 
 public class RocketProjectile : MonoBehaviour
-{
+{   
+    [SerializeField] private AudioSource audioSource;
     [SerializeField] private float speed = 10f;
     [SerializeField] private GameObject explosionPrefab;
     [SerializeField] private float explosionRadius = 5f;
@@ -51,15 +52,9 @@ public class RocketProjectile : MonoBehaviour
         Debug.Log("RocketProjectile: Explosion triggered!", gameObject);
 
         // Spawn the explosion effect
-        if (explosionPrefab != null)
-        {
-            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-            Debug.Log("RocketProjectile: Explosion prefab instantiated.", gameObject);
-        }
-        else
-        {
-            Debug.LogWarning("RocketProjectile: Explosion prefab is not assigned!", gameObject);
-        }
+        AudioSource.PlayClipAtPoint(audioSource.clip, transform.position);
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        Debug.Log("RocketProjectile: Explosion prefab instantiated.", gameObject);
 
         // Apply force to player if within explosion radius
         if (player != null)

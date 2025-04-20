@@ -15,9 +15,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
-
+    [SerializeField] private AudioSource audioSource;
     [SerializeField] private float friction = 0.1f;
-    private float maxVelocity = 5f; // Max allowed velocity before stopping acceleration
+    [SerializeField] private float maxVelocity = 5f; // Max allowed velocity before stopping acceleration
 
     void Start()
     {
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = gravityScale;
 
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
-        {
+        {   audioSource.Play();
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpingPower);
         }
 
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private void FixedUpdate()
-    {
+    {   
         rb.AddForce(new Vector2(horizontal * speed, 0), ForceMode2D.Force);
     }
 

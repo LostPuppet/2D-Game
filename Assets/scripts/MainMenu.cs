@@ -3,8 +3,10 @@ using UnityEngine.SceneManagement;
 
 public class StartGameManager : MonoBehaviour
 {
+    public GameData gameData;
     public void StartGame()
     {
+        gameData.SetCheckpoint(0);
         // Load the Forest and Player scenes additively
         SceneManager.LoadScene("Forest", LoadSceneMode.Additive);
         SceneManager.LoadScene("Player", LoadSceneMode.Additive);
