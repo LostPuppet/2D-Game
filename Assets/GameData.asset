@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: beb792a3c877ed147a5ac7c134b9ada0, type: 3}
   m_Name: GameData
   m_EditorClassIdentifier: 
-  currentTime: 2.4026449
-  currentCheckpoint: 2
+  currentTime: 0
+  currentCheckpoint: 0

@@ -17,3 +17,5 @@ MonoBehaviour:
     sceneName: Forest
   - checkpointID: 2
     sceneName: Forest2
+  - checkpointID: 3
+    sceneName: Forest2
